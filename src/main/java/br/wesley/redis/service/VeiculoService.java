@@ -4,6 +4,7 @@ import br.wesley.redis.dto.VeiculoDTO;
 import br.wesley.redis.mapper.VeiculoMapper;
 import br.wesley.redis.model.VeiculoManutencao;
 import br.wesley.redis.repository.VeiculoRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -57,5 +58,15 @@ public class VeiculoService {
 
         VeiculoManutencao salvo = repository.save(existente);
         return mapper.toDTO(salvo);
+    }
+
+    @CacheEvict(value = "veiculoByPlaca", key = "#placa")
+    public void deleteByPlaca(String placa) {
+        Optional<VeiculoManutencao> optional = repository.findByPlaca(placa);
+        if (optional.isPresent()) {
+            repository.delete(optional.get());
+        } else {
+            throw new RuntimeException("Veículo com placa '" + placa + "' não encontrado.");
+        }
     }
 }
