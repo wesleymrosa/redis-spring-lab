@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class VeiculoDTO {
-
     private String placa;
     private String modelo;
     private String oficina;
