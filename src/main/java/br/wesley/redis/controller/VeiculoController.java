@@ -46,4 +46,10 @@ public class VeiculoController {
         service.deleteByPlaca(placa);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/limpar-cache")
+    public ResponseEntity<Void> limparCache() {
+        service.limparCache();
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -69,4 +69,10 @@ public class VeiculoService {
             throw new RuntimeException("Veículo com placa '" + placa + "' não encontrado.");
         }
     }
+
+    @CacheEvict(value = "veiculos", allEntries = true)
+    public void limparCache() {
+        // Cache da lista de veículos invalidado manualmente
+    }
+
 }
