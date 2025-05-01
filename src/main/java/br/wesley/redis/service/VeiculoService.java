@@ -4,16 +4,15 @@ import br.wesley.redis.dto.VeiculoDTO;
 import br.wesley.redis.mapper.VeiculoMapper;
 import br.wesley.redis.model.VeiculoManutencao;
 import br.wesley.redis.repository.VeiculoRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-//@RequiredArgsConstructor
 public class VeiculoService {
 
     private final VeiculoRepository repository;
@@ -46,13 +45,17 @@ public class VeiculoService {
 
     @CachePut(value = "veiculoByPlaca", key = "#placa")
     public VeiculoDTO update(String placa, VeiculoDTO dto) {
-        VeiculoManutencao existente = repository.findByPlaca(placa)
-                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+        Optional<VeiculoManutencao> optional = repository.findByPlaca(placa);
+        if (optional.isEmpty()) {
+            throw new RuntimeException("Veículo com placa '" + placa + "' não encontrado.");
+        }
 
+        VeiculoManutencao existente = optional.get();
         existente.setModelo(dto.getModelo());
         existente.setOficina(dto.getOficina());
         existente.setDataEntrega(dto.getDataEntrega());
 
-        return mapper.toDTO(repository.save(existente));
+        VeiculoManutencao salvo = repository.save(existente);
+        return mapper.toDTO(salvo);
     }
 }

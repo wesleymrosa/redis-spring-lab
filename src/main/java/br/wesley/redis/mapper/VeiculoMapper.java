@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 public class VeiculoMapper {
 
     public VeiculoDTO toDTO(VeiculoManutencao veiculo) {
-        return VeiculoDTO.builder()
-                .placa(veiculo.getPlaca())
-                .modelo(veiculo.getModelo())
-                .oficina(veiculo.getOficina())
-                .dataEntrega(veiculo.getDataEntrega())
-                .build();
+        return new VeiculoDTO(
+                veiculo.getPlaca(),
+                veiculo.getModelo(),
+                veiculo.getOficina(),
+                veiculo.getDataEntrega()
+        );
     }
 
     public VeiculoManutencao toEntity(VeiculoDTO dto) {
-        return VeiculoManutencao.builder()
-                .placa(dto.getPlaca())
-                .modelo(dto.getModelo())
-                .oficina(dto.getOficina())
-                .dataEntrega(dto.getDataEntrega())
-                .build();
+        return new VeiculoManutencao(
+                dto.getPlaca(),
+                dto.getModelo(),
+                dto.getOficina(),
+                dto.getDataEntrega()
+        );
     }
 }
